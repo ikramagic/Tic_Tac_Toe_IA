@@ -19,24 +19,36 @@
         <link rel="stylesheet" type="text/css" href="./style.css" />
     </head>
     <body>
-        <h1 class="title">LET'S PLAY!</h1>
-        <section class="game-grid">
-            <div class="cell" id="A1"></div>
-            <div class="cell" id="A2"></div>
-            <div class="cell" id="A3"></div>
+        <div class="container">
+            <div class="column left-column">
+                <img src="assets/chess-player-sin-bg.png" alt="Siberian Player">
+            </div>
+    
+            <div class="column middle-column">
+                <h1 class="title">LET'S PLAY!</h1>
+                <section class="game-grid">
+                        <div class="cell" id="A1"></div>
+                        <div class="cell" id="A2"></div>
+                        <div class="cell" id="A3"></div>
+            
+                        <div class="cell" id="B1"></div>
+                        <div class="cell" id="B2"></div>
+                        <div class="cell" id="B3"></div>
+            
+                        <div class="cell" id="C1"></div>
+                        <div class="cell" id="C2"></div>
+                        <div class="cell" id="C3"></div>
+                </section>
+                <section class="actions">
+                    <a class="replay-button" href="./index.html">REPLAY</a>
+                </section>
+            </div>
+    
+            <div class="column right-column">
+                <img src="assets/bot-sin-bg.png" alt="Berber Bot">
+            </div>
+        </div>
 
-            <div class="cell" id="B1"></div>
-            <div class="cell" id="B2"></div>
-            <div class="cell" id="B3"></div>
-
-            <div class="cell" id="C1"></div>
-            <div class="cell" id="C2"></div>
-            <div class="cell" id="C3"></div>
-        </section>
-        <section class="actions">
-            <a class="replay-button" href="./index.html">REPLAY</a>
-        </section>
-        <div class="end-message" id="end-message"></div>
         <script src="./morpion.js"></script>
         <script>
             const morpion = new Morpion();
