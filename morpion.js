@@ -1,18 +1,18 @@
 class Morpion {
-	humanPlayer = 'J1';
-	iaPlayer = 'J2';
-	gameOver = false;
-	gridMap = [
-		[null, null, null],
-		[null, null, null],
-		[null, null, null],
-	];
+    humanPlayer = 'J1';
+    iaPlayer = 'IA Deep Flou';
+    gameOver = false;
+    gridMap = [
+        [null, null, null],
+        [null, null, null],
+        [null, null, null],
+    ];
 
-	constructor(firstPlayer = 'J1') {
-		this.humanPlayer = firstPlayer;
-		this.iaPlayer = (firstPlayer === 'J1') ? 'J2' : 'J1';
-		this.initGame();
-	}
+    constructor(firstPlayer = 'J1') {
+        this.humanPlayer = firstPlayer;
+        this.iaPlayer = (firstPlayer === 'J1') ? 'IA Deep Flou' : 'J1';
+        this.initGame();
+    }
 
 	initGame = () => {
 		this.gridMap.forEach((line, y) => {
@@ -34,6 +34,44 @@ class Morpion {
 		const cellId = `${lines[y]}${column}`;
 		return document.getElementById(cellId);
 	}
+
+	minimax(node, maximizingPlayer) {
+		if (node.children === undefined) {
+			return node.score;
+		}
+	
+		if (maximizingPlayer) {
+			let maxScore = -Infinity;
+			for (const child of node.children) {
+				const score = this.minimax(child, false);
+				maxScore = Math.max(maxScore, score);
+			}
+			return maxScore;
+		} else {
+			let minScore = Infinity;
+			for (const child of node.children) {
+				const score = this.minimax(child, true);
+				minScore = Math.min(minScore, score);
+			}
+			return minScore;
+		}
+	}
+
+	getBestMove(board, currentPlayer) {
+		const possibilitiesTree = this.createPossibilitiesTree(board, currentPlayer, depth); 
+		const bestMove = { score: -Infinity, move: null };
+	
+		for (const child of possibilitiesTree.children) {
+			const score = this.minimax(child, false);
+			if (score > bestMove.score) {
+				bestMove.score = score;
+				bestMove.move = child.move;
+			}
+		}
+	
+		return bestMove.move;
+	}
+	
 
     getBoardWinner = (board) => {
         const isWinningRow = ([a, b, c]) => (
@@ -82,13 +120,13 @@ class Morpion {
         this.gameOver = true;
         switch(winner) {
             case 'tie':
-			    this.displayEndMessage("Vous êtes à égalité !");
+			    this.displayEndMessage("It's a tie !");
                 break;
             case this.iaPlayer:
-                this.displayEndMessage("L'IA a gagné !");
+                this.displayEndMessage("Deep Flou sneak-attacked you !");
                 break;
             case this.humanPlayer:
-                this.displayEndMessage("Tu as battu l'IA !");
+                this.displayEndMessage("You defeated Deep Flou and healed your myopia, it's a miracle !");
                 break;
         }
 	}
@@ -124,14 +162,10 @@ class Morpion {
 		if (this.gameOver) {
 			return;
 		}
-
-		let hasPlayed = false;
-		this.gridMap.forEach((line, y) => {
-			line.forEach((cell, x) => {
-				if (!cell && !hasPlayed) {
-					hasPlayed = this.drawHit(x, y, this.iaPlayer);
-				}
-			});
-		});
-	}
+	
+		const bestMove = this.getBestMove(this.gridMap, this.iaPlayer);
+		if (bestMove !== null) {
+			this.drawHit(bestMove.x, bestMove.y, this.iaPlayer);
+		}
+	}	
 }
